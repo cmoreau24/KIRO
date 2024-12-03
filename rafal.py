@@ -47,6 +47,7 @@ def lot_change_cost(C):
                 if D[t] != D[t+1]:
                     if D[t] != []:
                         C += c_l
+    return C
 
 def rolling_window_cost(C):
     for constraint in constraints :
@@ -64,7 +65,38 @@ def rolling_window_cost(C):
 
     return C
 
+def batch_size_cost(C):
+    for constraint in constraints :
+        if constraint["type"] == "batch_size": 
+            vehicles = constraint["vehicles"]
+            m_b = constraint["min_vehicles"]
+            M_b = constraint["max_vehicles"]
+            c_b = constraint["cost"]
+            y = [c_b*max(0,m_b-k,k-M_b)**2 for k in range (len(L))]
+            for t in range(len(L)-1):
+                for t2 in range(t,len(L)):
+                    var1 = True
+                    if t>1:
+                        if L[t-1]  in vehicles:
+                            var1 = False
+                    var2 = True
+                    for t3 in range(t,t2+1):
+                        if not L[t3] in vehicles:
+                            var2 = False
+                    var3 = True
+                    if t2<=len(L)-2
+                        if L[t2+1]in vehicles:
+                                var3 = False
+                    if var1 and var2 and var3:
+                        C += y[t2-t]
 
+            
+    return C
+                
+
+                C += c_r*(max(0,S-Mr))**2
+
+    return C
 
 
 
