@@ -84,7 +84,7 @@ def batch_size_cost(C):
                         if not L[t3] in vehicles:
                             var2 = False
                     var3 = True
-                    if t2<=len(L)-2
+                    if t2<=len(L)-2 :
                         if L[t2+1]in vehicles:
                                 var3 = False
                     if var1 and var2 and var3:
@@ -94,13 +94,54 @@ def batch_size_cost(C):
     return C
                 
 
-                C += c_r*(max(0,S-Mr))**2
+                #C += c_r*(max(0,S-Mr))**2
 
-    return C
-
-
+    #return C
 
 
+
+import numpy as np
+def paint_shop(sequence:list,delta = 3):
+    #sequence est une liste de listes contenant [véhicule(i),bool] où
+    #  bool = true si véhicule(i) bicolor ; false sinon
+    n = len(sequence) #nbre vehicules
+    new_sequence = [[] for _ in range(n)]
+    D1 = {} #dictionnaire des véhicules bicolores
+    D2 = {} #dico des véhicules mono couleur
+    for i in range(1,n+1):
+        L = sequence[i-1]
+        if L[1]: #si bicolor
+            D1[i] = L
+        else :
+            D2[i] = L
+    print(D1,D2)
+
+    keys1 = []
+    for i in D1 :
+      keys1.append(i)
+    keys2 = []
+    for i in D2 :
+      keys2.append(i)
+    
+
+    for i in keys1[::-1] :
+      
+      k = min(i+delta-1,n)
+      while new_sequence[k-1] != [] :
+        k -= 1
+      
+      new_sequence[k-1].append( D1[i] )
+      
+    for v in new_sequence[::-1] :
+      if v == [] :
+        num, v_ = D2.popitem()
+        v.append(v_)
+        
+    print(new_sequence)
+
+
+
+#paint_shop( [['v1',True], ['v2',False], ['v3',True] ,['v4',False], ['v5',False], ['v6',False], ['v7',False], ['v8',True], ['v9',True], ['v10',False]]  )
 
             
           
