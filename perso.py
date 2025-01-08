@@ -4,7 +4,7 @@ import json
 import numpy as np
 
 
-with open('C:/Users/morea/OneDrive/Documents/KIRO/KIRO/tiny.json', 'r') as file:
+with open('medium_1.json', 'r') as file:
     data = json.load(file)
 
 vehicles = {}
@@ -182,34 +182,164 @@ parametre_permut_2=after_paint
 
 
 
-def permutations(L1,L2,L3, N):
+def permutations(L1,L2,L3, N, swap):
+    graph = []
     L1p=L1.copy()
     L2p=L2.copy()
     L3p =L3.copy()
     C=main(L1,L2,L3)[0]
     n=0
     while n < N:
-        L1=random_swap(L1p)  # les listes divergent !
-        L2=random_swap(L2p)
-        L3=random_swap(L3p)
+        L1=swap(L1p)  # les listes divergent !
+        L2=swap(L2p)
+        L3=swap(L3p)
         C_temp=main(L1,L2,L3)[0]
         print(C_temp)
+        graph.append(C_temp)
         if  C_temp <= C:
             L1p,L2p,L3p = L1,L2,L3
             C=C_temp
         n+=1
-    return L1p,L2p,L3p,C
+    return L1p,L2p,main(L1p,L2p,L3p)[1],L3p,C, graph
 
 def random_swap(L):
     i = np.random.randint(len(L))
     j = np.random.randint(len(L))
-    T=L
+    T=L.copy()
     T[i], T[j] = T[j], T[i]
     return T
 
+
+
 print(main(parametre_permut_0,parametre_permut_1, parametre_permut_2)[0])
 
-print(permutations(parametre_permut_0,parametre_permut_1, parametre_permut_2,1000))
+#print(permutations(parametre_permut_0,parametre_permut_1, parametre_permut_2,1000, random_swap))
 
 #print(paint_order(list(vehicles.values()),parameters['two_tone_delta']))
 #print(vehicles)
+
+
+def close_swap(L):
+    i = np.random.randint(len(L)-1)
+    T=L.copy()
+    T[i], T[i+1] = T[i+1], T[i]
+    return T
+
+
+def section_swap(L):
+    m = np.random.randint()
+
+#print(permutations(parametre_permut_0,parametre_permut_1, parametre_permut_2,10000, close_swap))
+
+#1064300
+
+def we_cooked_him(L1, L2, L3, alpha, T0, Tfin, N):
+    graph = []
+    L1p=L1.copy()
+    L2p=L2.copy()
+    L3p =L3.copy()
+    C=main(L1,L2,L3)[0]
+
+    L1_=close_swap(L1p)
+    L2_=close_swap(L2p)
+    L3_=close_swap(L3p)
+    C_ = main(L1_, L2_, L3_)[0]
+
+    if C < C_:
+        L1opt = L1p
+        L2opt = L2p
+        L3opt = L3p
+        C_opt = C
+        C_test = C_
+        L1_test = L1_
+        L2_test = L2_
+        L3_test = L3_
+
+
+    else:
+        L1opt = L1_
+        L2opt = L2_
+        L3opt = L3_
+        C_opt = C_
+        C_test = C
+        L1_test = L1p
+        L2_test = L2p
+        L3_test = L3p
+
+    T = T0
+    while T < Tfin:
+        if C_test < C_opt:
+            L1opt = L1_test
+            L2opt = L2_test
+            L3opt = L3_test
+            C_opt = C_test
+            C_test = C_opt
+            L1_test = L1opt
+            L2_test = L2opt
+            L3_test = L3opt
+   
+        p = np.exp(-(C_test - C_opt)/T)
+        for n in range(N):
+            if np.random.random() < p:
+                L1=close_swap(L1opt)  # les listes divergent !
+                L2=close_swap(L2opt)
+                L3=close_swap(L3opt)
+                C_temp=main(L1,L2,L3)[0]
+                if  C_temp <= C_opt:
+                    L1opt,L2opt,L3opt = L1,L2,L3
+                    C_opt=C_temp
+            else:
+                L1=close_swap(L1_test)  # les listes divergent !
+                L2=close_swap(L2_test)
+                L3=close_swap(L3_test)
+                C_temp=main(L1,L2,L3)[0]
+                if  C_temp <= C_test:
+                    L1_test,L2_test,L3_test = L1,L2,L3
+                    C_test=C_temp
+            graph.append(C_temp)
+        T*=alpha
+
+    if C_test < C_opt:
+        L1opt = L1_test
+        L2opt = L2_test
+        L3opt = L3_test           
+        C_opt = C_test
+        C_test = C_opt
+        L1_test = L1opt
+        L2_test = L2opt
+        L3_test = L3opt
+
+    return L1opt,L2opt,main(L1opt,L2opt,L3opt)[1],L3opt,C_opt, graph
+        
+
+
+""" USING CLOSE SWAP WE GET THE GOD SOlUTION !!! 
+        
+       Small_1: 942700, (array([ 0,  2,  1,  4,  3,  5,  6,  7,  8,  9, 10, 11, 14, 12, 15, 13, 17,
+       18, 16, 20, 24, 22, 23, 19, 28, 26, 21, 27, 25, 29, 31, 32, 30, 36,
+       33, 37, 35, 34, 40, 38, 39, 41, 43, 42, 47, 44, 45, 46, 48, 49, 53,
+       50, 52, 51]),  [1, 2, 5, 3, 6, 7, 4, 8, 9, 12, 11, 10, 13, 14, 16, 17, 18, 15, 19, 21, 23, 20, 22, 24, 25, 26, 27, 28, 29, 30, 35, 31, 33, 34, 38, 36, 39, 32, 37, 41, 42, 44, 40, 43, 45, 46, 48, 50, 47, 49, 52, 51, 53, 54], [ 1,  2,  5,  6,  7,  9, 10, 11, 12, 15, 18, 19, 23, 24, 20, 27, 22,
+       28, 30, 32, 34, 38, 41,  3, 39, 40,  4, 42, 44,  8, 43, 48, 46, 47,
+       13, 16, 14, 17, 21, 25, 29, 26, 33, 31, 37, 36, 35, 45, 49, 50, 54,
+       51, 53, 52], [0, 3, 1, 4, 6, 8, 14, 10, 9, 11, 18, 15, 19, 20, 21, 26, 22, 27, 34, 29, 33, 35, 38, 2, 37, 39, 5, 42, 41, 7, 43, 47, 49, 46, 17, 16, 12, 13, 23, 24, 28, 25, 30, 31, 36, 32, 40, 48, 45, 52, 50, 51, 53, 44], 942700)"""
+
+def minus_one(L):
+    T = []
+    for i in range(len(L)-1):
+        T.append(L[i]-1)
+    return T
+
+list_1 = [ 0,  2,  1,  4,  3,  5,  6,  7,  8,  9, 10, 11, 14, 12, 15, 13, 17,
+       18, 16, 20, 24, 22, 23, 19, 28, 26, 21, 27, 25, 29, 31, 32, 30, 36,
+       33, 37, 35, 34, 40, 38, 39, 41, 43, 42, 47, 44, 45, 46, 48, 49, 53,
+       50, 52, 51]
+list_2 = [1, 2, 5, 3, 6, 7, 4, 8, 9, 12, 11, 10, 13, 14, 16, 17, 18, 15, 19, 21, 23, 20, 22, 24, 25, 26, 27, 28, 29, 30, 35, 31, 33, 34, 38, 36, 39, 32, 37, 41, 42, 44, 40, 43, 45, 46, 48, 50, 47, 49, 52, 51, 53, 54]
+list_3 = [0, 3, 1, 4, 6, 8, 14, 10, 9, 11, 18, 15, 19, 20, 21, 26, 22, 27, 34, 29, 33, 35, 38, 2, 37, 39, 5, 42, 41, 7, 43, 47, 49, 46, 17, 16, 12, 13, 23, 24, 28, 25, 30, 31, 36, 32, 40, 48, 45, 52, 50, 51, 53, 44]
+
+result = we_cooked_him(parametre_permut_0,parametre_permut_1, parametre_permut_2, 1.1, 100000000000, 200000000000, 100)
+print(result)
+
+#result = permutations(parametre_permut_0,parametre_permut_1, parametre_permut_2, 1000, close_swap)
+import matplotlib.pyplot as plt
+plt.plot(result[-1])
+plt.show()
