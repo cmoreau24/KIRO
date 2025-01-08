@@ -4,7 +4,7 @@ import json
 import numpy as np
 
 
-with open('C:/Users/morea/OneDrive/Documents/KIRO/KIRO/small_1.json', 'r') as file:
+with open('C:/Users/morea/OneDrive/Documents/KIRO/KIRO/tiny.json', 'r') as file:
     data = json.load(file)
 
 vehicles = {}
@@ -141,24 +141,6 @@ def batch_size_cost(C,L_body,L_paint,L_assembly):
            
     return C
 
-
-
-
-
-parametre_permut_0=np.array(list(vehicles.keys()))-1
-parametre_permut_1=([i for i in range(1,len(list(vehicles.values()))+1)])
-
-new_sequence=[]
-for i in parametre_permut_1:
-    new_sequence.append(vehicles[i])
-after_paint=paint_order(parametre_permut_0,new_sequence,parameters['two_tone_delta'])[2]
-
-
-
-parametre_permut_2=after_paint
-
-#print(parametre_permut_2)
-
 def main(parametre_permut_0,parametre_permut_1, parametre_permut_2):
     cost=parameters['resequencing_cost']
     C = 0
@@ -183,10 +165,27 @@ def main(parametre_permut_0,parametre_permut_1, parametre_permut_2):
     return C,np.array(after_paint)+1, np.array(parametre_permut_0)+1
 
 
+
+parametre_permut_0=np.array(list(vehicles.keys()))-1
+parametre_permut_1=([i for i in range(1,len(list(vehicles.values()))+1)])
+
+new_sequence=[]
+for i in parametre_permut_1:
+    new_sequence.append(vehicles[i])
+after_paint=paint_order(parametre_permut_0,new_sequence,parameters['two_tone_delta'])[2]
+
+
+
+parametre_permut_2=after_paint
+
+#print(parametre_permut_2)
+
+
+
 def permutations(L1,L2,L3, N):
-    L1p=L1
-    L2p=L2
-    L3p =L3
+    L1p=L1.copy()
+    L2p=L2.copy()
+    L3p =L3.copy()
     C=main(L1,L2,L3)[0]
     n=0
     while n < N:
@@ -198,7 +197,6 @@ def permutations(L1,L2,L3, N):
         if  C_temp <= C:
             L1p,L2p,L3p = L1,L2,L3
             C=C_temp
-            
         n+=1
     return L1p,L2p,L3p,C
 
@@ -211,7 +209,7 @@ def random_swap(L):
 
 print(main(parametre_permut_0,parametre_permut_1, parametre_permut_2)[0])
 
-print(permutations(parametre_permut_0,parametre_permut_1, parametre_permut_2,100))
+print(permutations(parametre_permut_0,parametre_permut_1, parametre_permut_2,1000))
 
 #print(paint_order(list(vehicles.values()),parameters['two_tone_delta']))
 #print(vehicles)
