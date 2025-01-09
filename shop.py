@@ -1,9 +1,9 @@
 import numpy as np
 from dataclasses import dataclass, field
 from typing import List, Dict, Any
-from .batchSize import BatchSize, batch_size_cost
-from .lotChange import LotChange, lot_change_cost
-from .rollingWindow import RollingWindow, rolling_window_cost
+from batchSize import BatchSize, batch_size_cost
+from lotChange import LotChange, lot_change_cost
+from rollingWindow import RollingWindow, rolling_window_cost
 
 @dataclass
 class Shop:

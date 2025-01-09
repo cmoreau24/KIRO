@@ -1,6 +1,6 @@
-from .instance import Instance
-from .solution import Solution
-from .utils import *
+from instance import *
+from solution import *
+from utils import *
 
 def check_position_range(sequence: list[int], n_vehicles: int, verbose: bool = False) -> bool:
     """Check if sequence values are within valid vehicle range."""
@@ -22,7 +22,7 @@ def check_position_unicity(sequence: list[int], verbose: bool = False) -> bool:
 
 def check_sequence_equality(entry: list[int], exit: list[int], verbose: bool = False) -> bool:
     """Check if entry and exit sequences are identical."""
-    if entry != exit:
+    if list(entry) != list(exit):
         if verbose:
             pass# print(f"Warning: The entry and exit sequences are not valid: {entry} != {exit} (sequences must be the same)")
         return False
@@ -34,7 +34,7 @@ def check_paint_shop_requirements(
 ) -> bool:
     """Verify paint shop sequence requirements."""
     verif_exit = paint_shop_exit_sequence(instance, entry.copy())
-    if verif_exit != exit:
+    if list(verif_exit) != list(exit):
         if verbose:
             print(f"Warning: The entry and exit sequences don't match paint shop requirements: {exit} != {verif_exit}")
         return False
@@ -67,3 +67,8 @@ def is_feasible(instance: Instance, solution: Solution, verbose: bool = False) -
                 return False
     
     return True
+
+medium_2 = read_instance("medium_2.json")
+
+med_sol_2 = read_solution(medium_2,"med_sol_2.json")
+print(is_feasible(medium_2, med_sol_2))

@@ -1,8 +1,8 @@
 import numpy as np
 import json
 from pathlib import Path
-from .instance import Instance
-from .shop import shop_cost, delay_cost
+from instance import Instance
+from shop import shop_cost, delay_cost
 
 class Solution:
     def __init__(self, entries: np.ndarray, exits: np.ndarray):

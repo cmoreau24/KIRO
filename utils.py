@@ -1,7 +1,7 @@
-from .shop import Shop
-from .vehicle import Vehicle
-from .instance import Instance
-from .solution import Solution
+from shop import Shop
+from vehicle import Vehicle
+from instance import Instance
+from solution import Solution
 from copy import deepcopy
 
 # Apply the two-tone permutation defined by two_tone_delta for the vehicle at position idx in the sequence

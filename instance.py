@@ -2,11 +2,11 @@ import json
 from dataclasses import dataclass, field
 from typing import List, Dict, Any
 from pathlib import Path
-from .vehicle import Vehicle
-from .batchSize import BatchSize
-from .lotChange import LotChange
-from .rollingWindow import RollingWindow
-from .shop import Shop
+from vehicle import Vehicle
+from batchSize import BatchSize
+from lotChange import LotChange
+from rollingWindow import RollingWindow
+from shop import Shop
 
 
 @dataclass
