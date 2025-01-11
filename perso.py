@@ -4,7 +4,9 @@ import json
 import numpy as np
 
 
-with open('large_1.json', 'r') as file:
+with open("C:/Users/morea/OneDrive/Documents/2A/REOP/KIRO/small_1.json", 'r') as file:
+    
+
     data = json.load(file)
 
 vehicles = {}
@@ -162,7 +164,7 @@ def main(parametre_permut_0,parametre_permut_1, parametre_permut_2):
     C=rolling_window_cost(C,L_body,L_paint,L_assembly)
     C=batch_size_cost(C,L_body,L_paint,L_assembly)
 
-    return C,np.array(after_paint)+1, np.array(parametre_permut_0)+1
+    return C,list(np.array(after_paint)+1), list(np.array(parametre_permut_0)+1)
 
 
 
@@ -184,9 +186,9 @@ parametre_permut_2=after_paint
 
 def permutations(L1,L2,L3, N, swap):
     graph = []
-    L1p=L1.copy()
-    L2p=L2.copy()
-    L3p =L3.copy()
+    L1p=list(L1.copy())
+    L2p=list(L2.copy())
+    L3p =list(L3.copy())
     C=main(L1,L2,L3)[0]
     n=0
     while n < N:
@@ -200,7 +202,8 @@ def permutations(L1,L2,L3, N, swap):
             L1p,L2p,L3p = L1,L2,L3
             C=C_temp
             print(C_temp)
-            print(L1p,L2p,main(L1p,L2p,L3p)[1],L3p,C)
+            print(L1p,L2p,main(L1p,L2p,L3p)[1],L3p,C,graph)
+            print(n)
         n+=1
     return L1p,L2p,main(L1p,L2p,L3p)[1],L3p,C, graph
 
@@ -213,7 +216,7 @@ def random_swap(L):
 
 
 
-print(main(parametre_permut_0,parametre_permut_1, parametre_permut_2)[0])
+#print(main(parametre_permut_0,parametre_permut_1, parametre_permut_2)[0])
 
 #print(permutations(parametre_permut_0,parametre_permut_1, parametre_permut_2,1000, random_swap))
 
@@ -342,7 +345,8 @@ list_3 = [0, 3, 1, 4, 6, 8, 14, 10, 9, 11, 18, 15, 19, 20, 21, 26, 22, 27, 34, 2
 #result = we_cooked_him(parametre_permut_0,parametre_permut_1, parametre_permut_2, 1.1, 100000000000, 200000000000, 100)
 #print(result)
 
-result = permutations(parametre_permut_0,parametre_permut_1, parametre_permut_2, 10, close_swap)
+
+result = permutations(parametre_permut_0,parametre_permut_1, parametre_permut_2, 100000, close_swap)
 print(result)
 import matplotlib.pyplot as plt
 plt.plot(result[-1])
